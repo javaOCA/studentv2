@@ -34,9 +34,9 @@ public class RegistrationController {
             attributes.addFlashAttribute("person", personDto);
             return "redirect:/registration";
         }
+        // TODO verify login
         HttpSession session = request.getSession(true);
         session.setAttribute("person", personDto);
         return "redirect:/address";
     }
-
 }

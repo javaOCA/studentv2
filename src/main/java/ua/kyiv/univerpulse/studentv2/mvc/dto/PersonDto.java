@@ -24,7 +24,7 @@ public class PersonDto {
     @Pattern(regexp = "\\w{2,}", message = "{message.lastname.err}")
     private String lastName;
     @NotNull
-    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "{message.date.err}")
+    @Pattern(regexp = "^[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])$", message = "{message.date.err}")
     private String birthday;
     private String education;
     @NotNull

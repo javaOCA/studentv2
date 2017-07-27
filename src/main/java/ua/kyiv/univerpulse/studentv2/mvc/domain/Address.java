@@ -1,5 +1,7 @@
 package ua.kyiv.univerpulse.studentv2.mvc.domain;
 
+import ua.kyiv.univerpulse.studentv2.mvc.dto.AddressDto;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -16,6 +18,46 @@ public class Address {
     private String zipcode;
     @OneToMany(mappedBy = "address")
     private List<Person> persons;
+
+    public Address() {}
+
+    public static class Builder {
+
+        Address address = new Address();
+
+        public Builder setId(AddressDto addressDto) {
+            address.setId(addressDto.getId());
+            return this;
+        }
+
+        public Builder setCity(AddressDto addressDto) {
+            address.setCity(addressDto.getCity());
+            return this;
+        }
+
+        public Builder setStreet(AddressDto addressDto) {
+            address.setStreet(addressDto.getStreet());
+            return this;
+        }
+
+        public Builder setHome(AddressDto addressDto) {
+            address.setHome(addressDto.getHome());
+            return this;
+        }
+
+        public Builder setAppartment(AddressDto addressDto) {
+            address.setApartment(addressDto.getApartment());
+            return this;
+        }
+
+        public Builder setZipcode(AddressDto addressDto) {
+            address.setZipcode(addressDto.getZipcode());
+            return this;
+        }
+
+        public Address build() { return address; }
+
+    }
 
     public Long getId() {
         return id;

@@ -1,5 +1,7 @@
 package ua.kyiv.univerpulse.studentv2.mvc.domain;
 
+import ua.kyiv.univerpulse.studentv2.mvc.dto.MarksDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -21,6 +23,74 @@ public class Marks {
     private Integer drawing;
     @OneToOne(mappedBy = "marks")
     private Person person;
+
+    public Marks() {}
+
+    public static class Builder {
+        Marks marks = new Marks();
+
+        public Builder setId(MarksDto marksDto) {
+            marks.setId((marksDto.getId()));
+            return this;
+        }
+
+        public Builder setAlgebra(MarksDto marksDto) {
+            marks.setAlgebra((marksDto.getAlgebra()));
+            return this;
+        }
+
+        public Builder setGeometry(MarksDto marksDto) {
+            marks.setGeometry((marksDto.getGeometry()));
+            return this;
+        }
+
+        public Builder setPhysics(MarksDto marksDto) {
+            marks.setPhysics(marksDto.getPhysics());
+            return this;
+        }
+
+        public Builder setChemistry(MarksDto marksDto) {
+            marks.setChemistry((marksDto.getChemistry()));
+            return this;
+        }
+
+        public Builder setBiology(MarksDto marksDto) {
+            marks.setBiology((marksDto.getBiology()));
+            return this;
+        }
+
+        public Builder setComputer_science(MarksDto marksDto) {
+            marks.setComputer_science((marksDto.getComputer_science()));
+            return this;
+        }
+
+        public Builder setEnglish(MarksDto marksDto) {
+            marks.setEnglish((marksDto.getEnglish()));
+            return this;
+        }
+
+        public Builder setGeography(MarksDto marksDto) {
+            marks.setGeography((marksDto.getGeography()));
+            return this;
+        }
+
+        public Builder setLiterature(MarksDto marksDto) {
+            marks.setLiterature((marksDto.getLiterature()));
+            return this;
+        }
+
+        public Builder setMusic(MarksDto marksDto) {
+            marks.setMusic((marksDto.getMusic()));
+            return this;
+        }
+
+        public Builder setDrawing(MarksDto marksDto) {
+            marks.setDrawing((marksDto.getDrawing()));
+            return this;
+        }
+
+        public Marks build() { return marks; }
+    }
 
     public Long getId() {
         return id;
