@@ -1,16 +1,17 @@
-package ua.kyiv.univerpulse.mvc.domain;
+package ua.kyiv.univerpulse.studentv2.mvc.domain;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "faculty")
-public class Faculty {
+@Table(name = "role")
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    @ManyToMany(mappedBy = "faculties")
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Person> persons;
 
     public Long getId() {
@@ -21,12 +22,12 @@ public class Faculty {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public RoleEnum getRole() {
+        return role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRole(RoleEnum role) {
+        this.role = role;
     }
 
     public List<Person> getPersons() {
@@ -42,21 +43,21 @@ public class Faculty {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Faculty faculty = (Faculty) o;
+        Role role1 = (Role) o;
 
-        return name.equals(faculty.name);
+        return role == role1.role;
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return role.hashCode();
     }
 
     @Override
     public String toString() {
-        return "Faculty{" +
+        return "Role{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", role=" + role +
                 ", persons=" + persons +
                 '}';
     }

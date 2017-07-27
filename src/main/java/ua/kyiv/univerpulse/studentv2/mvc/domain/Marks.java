@@ -1,4 +1,4 @@
-package ua.kyiv.univerpulse.mvc.domain;
+package ua.kyiv.univerpulse.studentv2.mvc.domain;
 
 import javax.persistence.*;
 

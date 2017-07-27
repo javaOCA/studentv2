@@ -1,7 +1,10 @@
-package ua.kyiv.univerpulse.mvc.domain;
+package ua.kyiv.univerpulse.studentv2.mvc.domain;
+
+import ua.kyiv.univerpulse.studentv2.mvc.dto.PersonDto;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -31,6 +34,60 @@ public class Person {
     private Marks marks;
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
+
+    public Person() {}
+
+    public static class Builder {
+        Person person = new Person();
+
+        public Builder setId(PersonDto personDto) {
+            person.setId(personDto.getId());
+            return this;
+        }
+
+        public Builder setLogin(PersonDto personDto) {
+            person.setLogin(personDto.getLogin());
+            return this;
+        }
+
+        public Builder setPassword(PersonDto personDto) {
+            person.setPassword(personDto.getPassword());
+            return this;
+        }
+
+        public Builder setFirstName(PersonDto personDto) {
+            person.setFirstName(personDto.getFirstName());
+            return this;
+        }
+
+        public Builder setLastName(PersonDto personDto) {
+            person.setLastName(personDto.getLastName());
+            return this;
+        }
+
+        public Builder setEducation(PersonDto personDto) {
+            person.setEducation(personDto.getEducation());
+            return this;
+        }
+
+        public Builder setBirthday(PersonDto personDto) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+            person.setBirthday(LocalDate.parse(personDto.getBirthday(), formatter));
+            return this;
+        }
+
+        public Builder setPhone(PersonDto personDto) {
+            person.setPhone(personDto.getPhone());
+            return this;
+        }
+
+        public Builder setEmail(PersonDto personDto) {
+            person.setEmail(personDto.getEmail());
+            return this;
+        }
+
+        public Person build() { return person; }
+    }
 
     public Long getId() {
         return id;

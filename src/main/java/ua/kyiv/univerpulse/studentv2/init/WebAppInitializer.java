@@ -1,4 +1,4 @@
-package ua.kyiv.univerpulse.init;
+package ua.kyiv.univerpulse.studentv2.init;
 
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -24,7 +24,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
     private AnnotationConfigWebApplicationContext getContext() {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.setConfigLocation("ua.univerpulse.webchat.config");
+        context.setConfigLocation("ua.kyiv.univerpulse.studentv2.config");
         return context;
     }
 }
