@@ -1,5 +1,6 @@
 package ua.kyiv.univerpulse.studentv2.mvc.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.AddressDto;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.MarksDto;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.PersonDto;
+import ua.kyiv.univerpulse.studentv2.mvc.service.RegistrationService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,6 +19,12 @@ import javax.validation.Valid;
 
 @Controller
 public class MarksController {
+
+    private RegistrationService registrationService;
+    @Autowired
+    public MarksController(RegistrationService registrationService) {
+        this.registrationService = registrationService;
+    }
 
     @RequestMapping(value = "/marks", method = RequestMethod.GET)
     public String registrationMarks(Model model) {
@@ -37,10 +45,8 @@ public class MarksController {
         }
         HttpSession session = request.getSession();
         session.setAttribute("marks", marksDto);
-//        System.out.println((PersonDto) session.getAttribute("person"));
-//        System.out.println((AddressDto) session.getAttribute("address"));
-//        System.out.println((MarksDto) session.getAttribute("marks"));
-//        session.invalidate();
-        return "redirect:/";
+        registrationService.savePerson((PersonDto) session.getAttribute("person"),
+                (AddressDto) session.getAttribute("address"), (MarksDto) session.getAttribute("marks"));
+        return "redirect:/congratulation";
     }
 }

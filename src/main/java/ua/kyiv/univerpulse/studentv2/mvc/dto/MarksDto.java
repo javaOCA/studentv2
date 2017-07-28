@@ -26,7 +26,6 @@ public class MarksDto {
     private Integer geography;
     @Range(max = 12L, message = "{message.marks.err}")
     private Integer literature;
-    @Null
     @Range(max = 12L, message = "{message.marks.err}")
     private Integer music;
     @Range(max = 12L, message = "{message.marks.err}")

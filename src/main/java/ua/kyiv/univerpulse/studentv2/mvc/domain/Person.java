@@ -20,7 +20,7 @@ public class Person {
     private LocalDate birthday;
     private String education;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "address_id")
     private Address address;
     private String phone;
     private String email;
@@ -71,7 +71,7 @@ public class Person {
         }
 
         public Builder setBirthday(PersonDto personDto) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             person.setBirthday(LocalDate.parse(personDto.getBirthday(), formatter));
             return this;
         }
@@ -83,6 +83,21 @@ public class Person {
 
         public Builder setEmail(PersonDto personDto) {
             person.setEmail(personDto.getEmail());
+            return this;
+        }
+
+        public Builder setAddress(Address address) {
+            person.setAddress(address);
+            return this;
+        }
+
+        public Builder setMarks(Marks marks) {
+            person.setMarks(marks);
+            return this;
+        }
+
+        public Builder setRole(Role role) {
+            person.setRole(role);
             return this;
         }
 

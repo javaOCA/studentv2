@@ -26,6 +26,7 @@ public class PersonDto {
     @NotNull
     @Pattern(regexp = "^[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])$", message = "{message.date.err}")
     private String birthday;
+    @Pattern(regexp = "^(?!.*?none).*$", message = "{message.education.err}")
     private String education;
     @NotNull
     @Pattern(regexp = "^\\+{1}\\d{1,2}\\(\\d{3}\\)\\d{7}$", message = "{message.phone.err}")
@@ -143,7 +144,7 @@ public class PersonDto {
         }
 
         public Builder setBirthday(Person person) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             personDto.setBirthday((person.getBirthday()).format(formatter));
             return this;
         }

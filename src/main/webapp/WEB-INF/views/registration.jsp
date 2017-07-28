@@ -58,7 +58,7 @@
             </sf:select>
         </div>
         <div class="form-row">
-            <sf:errors path="birthday" cssClass="error"/>
+            <sf:errors path="education" cssClass="error"/>
         </div>
         <div class="form-row">
             <label for="email"><s:message code="auth.email"></s:message></label>
