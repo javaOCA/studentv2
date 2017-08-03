@@ -1,5 +1,6 @@
 package ua.kyiv.univerpulse.studentv2.mvc.controller;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -54,6 +55,7 @@ public class RegistrationController {
             return "redirect:/registration";
         } else {
             HttpSession session = request.getSession(true);
+            personDto.setPassword(DigestUtils.md5Hex(personDto.getPassword() + personDto.getLogin()));
             session.setAttribute("person", personDto);
             return "redirect:/address";
         }

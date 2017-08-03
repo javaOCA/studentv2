@@ -19,7 +19,6 @@ public class PersonRepositoryImpl implements PersonRepositoryCustom {
     private MessageSource messageSource;
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
     public void savePerson(Person person) {
         try {
             em.persist(person);

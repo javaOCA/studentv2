@@ -15,7 +15,7 @@ public class AddressDto {
     @Size(min = 2, message = "{message.street.err}")
     private String street;
     @NotNull
-    @Pattern(regexp = "^[1-9]{1}[а-яА-ЯёЁa-zA-Z0-9]*$", message = "{message.home.err}")
+    @Pattern(regexp = "^[1-9]{1}\\w*$", message = "{message.home.err}")
     private String home;
     private String apartment;
     @Pattern(regexp = "\\d{5}", message = "{message.zip.err}")

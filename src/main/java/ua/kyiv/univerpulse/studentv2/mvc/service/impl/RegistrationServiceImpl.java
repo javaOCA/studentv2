@@ -1,15 +1,20 @@
 package ua.kyiv.univerpulse.studentv2.mvc.service.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.kyiv.univerpulse.studentv2.mvc.domain.*;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.AddressDto;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.MarksDto;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.PersonDto;
+import ua.kyiv.univerpulse.studentv2.mvc.exception.PersonMailException;
 import ua.kyiv.univerpulse.studentv2.mvc.exception.PersonSaveException;
 import ua.kyiv.univerpulse.studentv2.mvc.exception.ServiceException;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.PersonRepository;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.RoleRepository;
+import ua.kyiv.univerpulse.studentv2.mvc.service.MailService;
 import ua.kyiv.univerpulse.studentv2.mvc.service.RegistrationService;
 
 import java.util.Objects;
@@ -17,15 +22,20 @@ import java.util.Objects;
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
 
+    private final static Logger logger = Logger.getLogger(RegistrationServiceImpl.class);
+
     private PersonRepository personRepository;
     private RoleRepository roleRepository;
+    private MailService mailService;
     @Autowired
-    public RegistrationServiceImpl(PersonRepository personRepository, RoleRepository roleRepository) {
+    public RegistrationServiceImpl(PersonRepository personRepository, RoleRepository roleRepository, MailService mailService) {
         this.personRepository = personRepository;
         this.roleRepository = roleRepository;
+        this.mailService = mailService;
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void savePerson(PersonDto personDto, AddressDto addressDto, MarksDto marksDto) {
         Role role = roleRepository.findRoleByRoleName(RoleEnum.USER);
         Address address = new Address.Builder()
@@ -48,8 +58,14 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .setRole(role).build();
         try {
             personRepository.savePerson(person);
-        }catch (PersonSaveException e){
-            throw new ServiceException(e.getMessage());
+            if (logger.isDebugEnabled())
+                logger.debug("Save in DB person with login: " + person.getLogin());
+            mailService.sendMessage(personDto);
+            if (logger.isDebugEnabled())
+                logger.debug("Send e-mail to " + person.getEmail());
+        } catch (PersonSaveException | PersonMailException e){
+            logger.error("Catch person save or mail exception", e);
+//            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -62,5 +78,17 @@ public class RegistrationServiceImpl implements RegistrationService {
         } else {
             return true;
         }
+    }
+
+    @Override
+    public Person findPersonByNameAndAddress(PersonDto personDto, AddressDto addressDto) {
+        Person person = new Person();
+        try {
+            person = personRepository.findPersonByNameAndAddress(personDto.getFirstName(), personDto.getLastName(),
+                    addressDto.getCity(), addressDto.getStreet(), addressDto.getHome(), addressDto.getApartment());
+        } catch (PersonSaveException e) {
+            throw new ServiceException(e.getMessage());
+        }
+        return person;
     }
 }

@@ -11,11 +11,11 @@
 </head>
 <body>
     <sf:form cssClass="reg-form">
-        <h3>
+        <h1>
             <s:message code="auth.greeting"/>&nbsp;
             <c:out value="${firstName}"/>&nbsp;
             <c:out value="${lastName}"/>!
-        </h3>
+        </h1>
         <hr>
         <div class="form-row">
             <p><s:message code="auth.congratulation"></s:message></p>

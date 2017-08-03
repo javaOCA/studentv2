@@ -1,11 +1,10 @@
 package ua.kyiv.univerpulse.studentv2.mvc.dto;
 
 import ua.kyiv.univerpulse.studentv2.mvc.domain.Person;
+import ua.kyiv.univerpulse.studentv2.mvc.domain.Role;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class PersonDto {
@@ -35,6 +34,7 @@ public class PersonDto {
     @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
             message = "{message.email.err}")
     private String email;
+    private Role role;
 
     public PersonDto() {}
 
@@ -110,6 +110,14 @@ public class PersonDto {
         this.email = email;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public static class Builder {
         PersonDto personDto = new PersonDto();
 
@@ -156,6 +164,11 @@ public class PersonDto {
 
         public Builder setEmail(Person person) {
             personDto.setEmail(person.getEmail());
+            return this;
+        }
+
+        public Builder setRole(Person person) {
+            personDto.setRole(person.getRole());
             return this;
         }
 

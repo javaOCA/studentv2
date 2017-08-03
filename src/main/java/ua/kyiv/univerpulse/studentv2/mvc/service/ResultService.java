@@ -1,0 +1,12 @@
+package ua.kyiv.univerpulse.studentv2.mvc.service;
+
+import ua.kyiv.univerpulse.studentv2.mvc.dto.MarksDto;
+import ua.kyiv.univerpulse.studentv2.mvc.dto.PersonDto;
+
+public interface ResultService {
+
+    Integer getTotalScoring(PersonDto personDto);
+
+    Integer getTotalResult(MarksDto marksDto);
+
+}

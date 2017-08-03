@@ -3,7 +3,7 @@
     overflow: hidden;
 }
 
-.form-row input, select {
+.form-row input {
     float: right;
     height: 19px;
     line-height: 19px;
