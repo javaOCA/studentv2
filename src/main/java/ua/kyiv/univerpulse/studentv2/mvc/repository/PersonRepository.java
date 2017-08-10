@@ -4,8 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ua.kyiv.univerpulse.studentv2.mvc.domain.Address;
 import ua.kyiv.univerpulse.studentv2.mvc.domain.Person;
+
+import java.util.List;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long>, PersonRepositoryCustom {
@@ -20,4 +21,6 @@ public interface PersonRepository extends JpaRepository<Person, Long>, PersonRep
                                       @Param("street") String street,
                                       @Param("home") String home,
                                       @Param("apartment") String apartment);
+    @Query("select p from Person p where p.role.role <> ua.kyiv.univerpulse.studentv2.mvc.domain.RoleEnum.ROLE_ADMIN")
+    List<Person> getAllPersonWithoutAdmin();
 }

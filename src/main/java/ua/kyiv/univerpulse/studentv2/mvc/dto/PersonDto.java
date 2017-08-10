@@ -1,5 +1,6 @@
 package ua.kyiv.univerpulse.studentv2.mvc.dto;
 
+import ua.kyiv.univerpulse.studentv2.mvc.domain.Enlist;
 import ua.kyiv.univerpulse.studentv2.mvc.domain.Person;
 import ua.kyiv.univerpulse.studentv2.mvc.domain.Role;
 
@@ -37,6 +38,7 @@ public class PersonDto {
             message = "{message.email.err}")
     private String email;
     private Role role;
+    private Enlist enlist;
 
     public PersonDto() {}
 
@@ -124,6 +126,10 @@ public class PersonDto {
         this.role = role;
     }
 
+    public Enlist getEnlist() { return enlist; }
+
+    public void setEnlist(Enlist enlist) { this.enlist = enlist; }
+
     public static class Builder {
         PersonDto personDto = new PersonDto();
 
@@ -180,6 +186,11 @@ public class PersonDto {
 
         public Builder setRole(Person person) {
             personDto.setRole(person.getRole());
+            return this;
+        }
+
+        public Builder setEnlist(Person person) {
+            personDto.setEnlist(person.getEnlist());
             return this;
         }
 

@@ -20,6 +20,7 @@ import ua.kyiv.univerpulse.studentv2.mvc.repository.PersonRepository;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.RoleRepository;
 import ua.kyiv.univerpulse.studentv2.mvc.service.MailService;
 import ua.kyiv.univerpulse.studentv2.mvc.service.RegistrationService;
+import ua.kyiv.univerpulse.studentv2.mvc.service.ResultService;
 import ua.kyiv.univerpulse.studentv2.mvc.service.UploadFiles;
 
 import java.time.LocalDate;
@@ -37,15 +38,17 @@ public class RegistrationServiceImpl implements RegistrationService {
     private MailService mailService;
     private UploadFiles uploadFiles;
     private FacultyRepository facultyRepository;
+    private ResultService resultService;
     @Autowired
     public RegistrationServiceImpl(PersonRepository personRepository, RoleRepository roleRepository,
                                    MailService mailService, UploadFiles uploadFiles,
-                                   FacultyRepository facultyRepository) {
+                                   FacultyRepository facultyRepository, ResultService resultService) {
         this.personRepository = personRepository;
         this.roleRepository = roleRepository;
         this.mailService = mailService;
         this.uploadFiles = uploadFiles;
         this.facultyRepository = facultyRepository;
+        this.resultService = resultService;
     }
 
     @Override
@@ -71,18 +74,22 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .setAddress(address).setMarks(marks)
                 .setRole(role).build();
         Faculty faculty = new Faculty();
+        Enlist enlist = new Enlist();
+        enlist.setTotalScore(resultService.getTotalResult(marksDto));
+        enlist.setAction(ActionEnum.PROCESS);
         person.setFaculty(facultyRepository.findFacultyByName(personDto.getFaculty()));
+        person.setEnlist(enlist);
         List<FileInfo> uploadedFiles = new ArrayList<>();
         try {
             personRepository.savePerson(person);
             if (logger.isDebugEnabled())
                 logger.debug("Save in DB person with id: " + person.getId());
-            uploadedFiles = uploadFiles.uploadFiles(files, person);
-            if (logger.isDebugEnabled())
-                logger.debug("Save person files to disk");
 //            mailService.sendMessage(personDto);
             if (logger.isDebugEnabled())
                 logger.debug("Send e-mail to " + person.getEmail());
+            uploadedFiles = uploadFiles.uploadFiles(files, person);
+            if (logger.isDebugEnabled())
+                logger.debug("Save person files to disk");
         } catch (PersonSaveException | PersonMailException | UploadFileException e){
             logger.error("Catch person save or mail exception", e);
             throw new ServiceException(e.getMessage());

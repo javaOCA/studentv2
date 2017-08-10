@@ -23,7 +23,7 @@ public class Person {
     private Address address;
     private String phone;
     private String email;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -31,6 +31,9 @@ public class Person {
     private Marks marks;
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "enlist_id")
+    private Enlist enlist;
 
     public Person() {}
 
@@ -100,6 +103,11 @@ public class Person {
 
         public Builder setRole(Role role) {
             person.setRole(role);
+            return this;
+        }
+
+        public Builder setEnlist(Enlist enlist) {
+            person.setEnlist(enlist);
             return this;
         }
 
@@ -209,6 +217,10 @@ public class Person {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public Enlist getEnlist() { return enlist; }
+
+    public void setEnlist(Enlist enlist) { this.enlist = enlist; }
 
     @Override
     public boolean equals(Object o) {

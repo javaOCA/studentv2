@@ -22,7 +22,7 @@
         </tr>
         <c:forEach items="${faculties}" var="fc">
             <tr>
-                <sf:form modelAttribute="faculty" action="${formHandler}">
+                <sf:form modelAttribute="faculty" action="/admin/faculties/update">
                     <td><sf:input path="id" size="3" readonly="true" value="${fc.id}"/></td>
                     <td><sf:input path="name" size="50" value="${fc.name}"/></td>
                     <td><sf:input path="evaluationDate" size="10" value="${fc.evaluationDate}"/></td>
