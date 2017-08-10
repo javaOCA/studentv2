@@ -18,10 +18,10 @@
             <td>${person.lastName}</td>
             <td>${person.birthday}</td>
             <td>${total}</td>
-            <td>${total > 100 ? "Entered" : "Didn't enter"}</td>
+            <td>Your data are processing, wait...</td>
         </tr>
     </table>
     <hr>
-    <a href="/">Logout -></a>
+    <a href="/exit">Logout -></a>
 </body>
 </html>

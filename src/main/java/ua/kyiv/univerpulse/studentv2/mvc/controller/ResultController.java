@@ -21,7 +21,7 @@ public class ResultController {
     }
 
     @RequestMapping(value = "/result", method = RequestMethod.GET)
-    public String getResultPerson(HttpServletRequest request, HttpServletResponse response) {
+    public String getResultPerson(HttpServletRequest request) {
         PersonDto personDto = (PersonDto) request.getSession().getAttribute("person");
         if (Objects.nonNull(personDto)) {
             Integer result = resultService.getTotalScoring(personDto);
@@ -29,7 +29,7 @@ public class ResultController {
             request.setAttribute("person", personDto);
             return "result";
         } else {
-            return "redirect:/";
+            return "redirect:/exit";
         }
     }
 }

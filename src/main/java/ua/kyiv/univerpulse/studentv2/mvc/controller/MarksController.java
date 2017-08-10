@@ -20,12 +20,6 @@ import javax.validation.Valid;
 @Controller
 public class MarksController {
 
-    private RegistrationService registrationService;
-    @Autowired
-    public MarksController(RegistrationService registrationService) {
-        this.registrationService = registrationService;
-    }
-
     @RequestMapping(value = "/marks", method = RequestMethod.GET)
     public String registrationMarks(Model model) {
         if (!model.containsAttribute("marks")) {
@@ -45,8 +39,6 @@ public class MarksController {
         }
         HttpSession session = request.getSession();
         session.setAttribute("marks", marksDto);
-        registrationService.savePerson((PersonDto) session.getAttribute("person"),
-                (AddressDto) session.getAttribute("address"), (MarksDto) session.getAttribute("marks"));
-        return "redirect:/congratulation";
+        return "redirect:/upload";
     }
 }

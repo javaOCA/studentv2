@@ -5,7 +5,6 @@ import ua.kyiv.univerpulse.studentv2.mvc.dto.PersonDto;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Entity
 @Table(name = "person")
@@ -24,11 +23,9 @@ public class Person {
     private Address address;
     private String phone;
     private String email;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "person_faculties",
-    joinColumns = @JoinColumn(name = "person_id"),
-    inverseJoinColumns = @JoinColumn(name = "faculty_id"))
-    private List<Faculty> faculties;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "faculty_id")
+    private Faculty faculty;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "marks_id")
     private Marks marks;
@@ -93,6 +90,11 @@ public class Person {
 
         public Builder setMarks(Marks marks) {
             person.setMarks(marks);
+            return this;
+        }
+
+        public Builder setFaculty(Faculty faculty) {
+            person.setFaculty(faculty);
             return this;
         }
 
@@ -184,12 +186,12 @@ public class Person {
         this.email = email;
     }
 
-    public List<Faculty> getFaculties() {
-        return faculties;
+    public Faculty getFaculty() {
+        return faculty;
     }
 
-    public void setFaculties(List<Faculty> faculties) {
-        this.faculties = faculties;
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
     }
 
     public Marks getMarks() {
@@ -243,7 +245,7 @@ public class Person {
                 ", education='" + education + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", faculties=" + faculties +
+                ", faculties=" + faculty +
                 '}';
     }
 }

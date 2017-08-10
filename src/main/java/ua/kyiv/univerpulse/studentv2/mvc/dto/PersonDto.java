@@ -27,6 +27,8 @@ public class PersonDto {
     private String birthday;
     @Pattern(regexp = "^(?!.*?none).*$", message = "{message.education.err}")
     private String education;
+    @Pattern(regexp = "^(?!.*?none).*$", message = "{message.faculty.err}")
+    private String faculty;
     @NotNull
     @Pattern(regexp = "^\\+{1}\\d{1,2}\\(\\d{3}\\)\\d{7}$", message = "{message.phone.err}")
     private String phone;
@@ -94,6 +96,10 @@ public class PersonDto {
         this.education = education;
     }
 
+    public String getFaculty() { return faculty; }
+
+    public void setFaculty(String faculty) { this.faculty = faculty; }
+
     public String getPhone() {
         return phone;
     }
@@ -148,6 +154,11 @@ public class PersonDto {
 
         public Builder setEducation(Person person) {
             personDto.setEducation(person.getEducation());
+            return this;
+        }
+
+        public Builder setFaculty(Person person) {
+            personDto.setFaculty(person.getFaculty().getName());
             return this;
         }
 

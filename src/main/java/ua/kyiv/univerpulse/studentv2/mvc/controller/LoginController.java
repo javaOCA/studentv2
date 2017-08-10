@@ -56,10 +56,10 @@ public class LoginController {
         if (Objects.nonNull(personDto)) {
             session.setAttribute("person", personDto);
             switch (personDto.getRole().getRole()) {
-                case ADMIN:
+                case ROLE_ADMIN:
                     action.append("redirect:/admin");
                     break;
-                case USER:
+                case ROLE_USER:
                     action.append("redirect:/result");
                     break;
             }

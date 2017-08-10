@@ -1,0 +1,5 @@
+<ul class="css-menu">
+    <li><a href="/exit"><s:message code="admin.main"/></a></li>
+    <li><a href="/admin/faculties"><s:message code="admin.faculty"/></a></li>
+    <li><a href="/admin/entrants"><s:message code="admin.entrants"/></a></li>
+</ul>

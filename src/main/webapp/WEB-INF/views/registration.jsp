@@ -61,6 +61,18 @@
             <sf:errors path="education" cssClass="error"/>
         </div>
         <div class="form-row">
+            <label for="faculty"><s:message code="auth.faculty"></s:message></label>
+            <sf:select path="faculty" required="required">
+                <sf:option value="none"><s:message code="auth.select"/></sf:option>
+                <c:forEach items="${sessionScope.faculties}" var="fc">
+                    <sf:option value="${fc.name}"><c:out value="${fc.name}"/></sf:option>
+                </c:forEach>
+            </sf:select>
+        </div>
+        <div class="form-row">
+            <sf:errors path="faculty" cssClass="error"/>
+        </div>
+        <div class="form-row">
             <label for="email"><s:message code="auth.email"></s:message></label>
             <sf:input path="email" required="required"/>
         </div>

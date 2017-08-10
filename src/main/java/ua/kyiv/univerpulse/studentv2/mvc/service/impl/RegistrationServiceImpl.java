@@ -5,18 +5,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ua.kyiv.univerpulse.studentv2.mvc.domain.*;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.AddressDto;
+import ua.kyiv.univerpulse.studentv2.mvc.dto.FacultyDto;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.MarksDto;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.PersonDto;
 import ua.kyiv.univerpulse.studentv2.mvc.exception.PersonMailException;
 import ua.kyiv.univerpulse.studentv2.mvc.exception.PersonSaveException;
 import ua.kyiv.univerpulse.studentv2.mvc.exception.ServiceException;
+import ua.kyiv.univerpulse.studentv2.mvc.exception.UploadFileException;
+import ua.kyiv.univerpulse.studentv2.mvc.repository.FacultyRepository;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.PersonRepository;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.RoleRepository;
 import ua.kyiv.univerpulse.studentv2.mvc.service.MailService;
 import ua.kyiv.univerpulse.studentv2.mvc.service.RegistrationService;
+import ua.kyiv.univerpulse.studentv2.mvc.service.UploadFiles;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -27,17 +35,23 @@ public class RegistrationServiceImpl implements RegistrationService {
     private PersonRepository personRepository;
     private RoleRepository roleRepository;
     private MailService mailService;
+    private UploadFiles uploadFiles;
+    private FacultyRepository facultyRepository;
     @Autowired
-    public RegistrationServiceImpl(PersonRepository personRepository, RoleRepository roleRepository, MailService mailService) {
+    public RegistrationServiceImpl(PersonRepository personRepository, RoleRepository roleRepository,
+                                   MailService mailService, UploadFiles uploadFiles,
+                                   FacultyRepository facultyRepository) {
         this.personRepository = personRepository;
         this.roleRepository = roleRepository;
         this.mailService = mailService;
+        this.uploadFiles = uploadFiles;
+        this.facultyRepository = facultyRepository;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void savePerson(PersonDto personDto, AddressDto addressDto, MarksDto marksDto) {
-        Role role = roleRepository.findRoleByRoleName(RoleEnum.USER);
+    public List<FileInfo> savePerson(PersonDto personDto, AddressDto addressDto, MarksDto marksDto, MultipartFile[] files) {
+        Role role = roleRepository.findRoleByRoleName(RoleEnum.ROLE_USER);
         Address address = new Address.Builder()
                 .setCity(addressDto).setStreet(addressDto)
                 .setHome(addressDto).setAppartment(addressDto)
@@ -56,17 +70,24 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .setEmail(personDto).setPhone(personDto)
                 .setAddress(address).setMarks(marks)
                 .setRole(role).build();
+        Faculty faculty = new Faculty();
+        person.setFaculty(facultyRepository.findFacultyByName(personDto.getFaculty()));
+        List<FileInfo> uploadedFiles = new ArrayList<>();
         try {
             personRepository.savePerson(person);
             if (logger.isDebugEnabled())
-                logger.debug("Save in DB person with login: " + person.getLogin());
-            mailService.sendMessage(personDto);
+                logger.debug("Save in DB person with id: " + person.getId());
+            uploadedFiles = uploadFiles.uploadFiles(files, person);
+            if (logger.isDebugEnabled())
+                logger.debug("Save person files to disk");
+//            mailService.sendMessage(personDto);
             if (logger.isDebugEnabled())
                 logger.debug("Send e-mail to " + person.getEmail());
-        } catch (PersonSaveException | PersonMailException e){
+        } catch (PersonSaveException | PersonMailException | UploadFileException e){
             logger.error("Catch person save or mail exception", e);
-//            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getMessage());
         }
+        return uploadedFiles;
     }
 
     @Override
@@ -90,5 +111,41 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new ServiceException(e.getMessage());
         }
         return person;
+    }
+
+    @Override
+    public List<Faculty> getAllFaculty() {
+        return facultyRepository.getAllFaculty();
+    }
+
+    @Override
+    public void updateFaculty(FacultyDto facultyDto) {
+        Faculty faculty = new Faculty.Builder().getId(facultyDto)
+                .getName(facultyDto).getEvaluationDate(facultyDto)
+                .getPassingScore(facultyDto).getNumberOfStudents(facultyDto).build();
+        if(logger.isDebugEnabled())
+            logger.debug("Update entity Faculty in RegistrationServiceImpl: " + faculty);
+        facultyRepository.updateFaculty(faculty);
+    }
+
+    @Override
+    public void saveFaculty(FacultyDto facultyDto) {
+        Faculty faculty = new Faculty.Builder().getName(facultyDto)
+                .getEvaluationDate(facultyDto).getPassingScore(facultyDto)
+                .getNumberOfStudents(facultyDto).build();
+        facultyRepository.saveFaculty(faculty);
+    }
+
+    @Override
+    public boolean findEvaluationDateByFaculty(PersonDto personDto) {
+        LocalDate registeredDate = LocalDate.now();
+        LocalDate evaluationDate = (facultyRepository.getEvaluationDateByName(personDto.getFaculty())).toLocalDate();
+        if (logger.isDebugEnabled())
+            logger.debug("registeredDate = " + registeredDate + "; evaluationDate = " + evaluationDate);
+        if(registeredDate.isAfter(evaluationDate)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -1,9 +1,5 @@
 package ua.kyiv.univerpulse.studentv2.mvc.repository.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ua.kyiv.univerpulse.studentv2.mvc.domain.Person;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.PersonRepositoryCustom;
 
@@ -14,9 +10,6 @@ public class PersonRepositoryImpl implements PersonRepositoryCustom {
 
     @PersistenceContext
     private EntityManager em;
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Override
     public void savePerson(Person person) {

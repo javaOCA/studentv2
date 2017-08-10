@@ -30,9 +30,11 @@ public class RegistrationController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET, name = "registrationPerson")
-    public String registrationPerson(Model model) {
+    public String registrationPerson(Model model, HttpServletRequest request) {
         if (!model.containsAttribute("person")) {
             model.addAttribute("person", new PersonDto());
+            HttpSession session = request.getSession(true);
+            session.setAttribute("faculties", registrationService.getAllFaculty());
         }
         return "registration";
     }
@@ -53,11 +55,18 @@ public class RegistrationController {
             personDto.setPassword("");
             attributes.addFlashAttribute("person", personDto);
             return "redirect:/registration";
-        } else {
-            HttpSession session = request.getSession(true);
-            personDto.setPassword(DigestUtils.md5Hex(personDto.getPassword() + personDto.getLogin()));
-            session.setAttribute("person", personDto);
-            return "redirect:/address";
         }
+        if(registrationService.findEvaluationDateByFaculty(personDto)) {
+            attributes.addFlashAttribute("error",
+                    messageSource.getMessage("date.exists", null, LocaleContextHolder.getLocale()));
+            personDto.setPassword("");
+            attributes.addFlashAttribute("person", personDto);
+            return "redirect:/registration";
+        }
+        HttpSession session = request.getSession(true);
+        personDto.setPassword(DigestUtils.md5Hex(personDto.getPassword() + personDto.getLogin()));
+        session.setAttribute("person", personDto);
+        return "redirect:/address";
+
     }
 }
