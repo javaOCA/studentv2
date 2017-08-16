@@ -6,4 +6,6 @@ public interface PersonRepositoryCustom {
 
     void savePerson(Person person);
 
+    void updatePerson(Person person);
+
 }

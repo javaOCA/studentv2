@@ -84,7 +84,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             personRepository.savePerson(person);
             if (logger.isDebugEnabled())
                 logger.debug("Save in DB person with id: " + person.getId());
-            mailService.sendMessage(personDto);
+            mailService.sendMessage(person);
             if (logger.isDebugEnabled())
                 logger.debug("Send e-mail to " + person.getEmail());
             uploadedFiles = uploadFiles.uploadFiles(files, person);
@@ -156,5 +156,17 @@ public class RegistrationServiceImpl implements RegistrationService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updatePerson(PersonDto personDto) {
+        Person person = new Person.Builder().setId(personDto)
+                .setFirstName(personDto).setLastName(personDto)
+                .setEmail(personDto).setPhone(personDto)
+                .build();
+        if (logger.isDebugEnabled())
+            logger.debug("Update person = " + person);
+        personRepository.updatePerson(person);
     }
 }

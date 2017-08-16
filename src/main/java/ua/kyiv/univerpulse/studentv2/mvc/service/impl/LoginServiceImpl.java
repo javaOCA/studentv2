@@ -25,10 +25,18 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public PersonDto verifyLogin(String login, String password) {
         Person person = personRepository.findPersonByLogin(login);
+        PersonDto personDto;
         if (Objects.nonNull(person)) {
-            PersonDto personDto = new PersonDto.Builder().setId(person).setLogin(person).setPassword(person)
-                    .setFirstName(person).setLastName(person).setBirthday(person).setEducation(person)
-                    .setEmail(person).setPhone(person).setRole(person).build();
+            switch (person.getRole().getRole()) {
+                case ROLE_ADMIN:
+                    personDto = new PersonDto.Builder()
+                            .setId(person).setLogin(person).setPassword(person).setRole(person).build();
+                    break;
+                default:
+                    personDto = new PersonDto.Builder().setId(person).setLogin(person).setPassword(person)
+                            .setFirstName(person).setLastName(person).setBirthday(person).setEducation(person)
+                            .setEmail(person).setPhone(person).setRole(person).build();
+            }
             if (Objects.nonNull(personDto) && personDto.getPassword().equals(DigestUtils.md5Hex(password + login))) {
                 if (logger.isDebugEnabled())
                     logger.debug("Connect person with login = " + login);

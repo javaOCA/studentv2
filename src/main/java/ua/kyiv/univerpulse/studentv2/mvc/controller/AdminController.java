@@ -86,4 +86,17 @@ public class AdminController {
         model.addAttribute("person", new PersonDto());
         return "entrants";
     }
+
+    @RequestMapping(value = "/admin/entrants/update", method = RequestMethod.POST)
+    public String updateEntrantsPage(@ModelAttribute("person") PersonDto personDto, Model model) {
+//        if (logger.isDebugEnabled())
+//            logger.debug("In AdminController update person = " + personDto);
+        registrationService.updatePerson(personDto);
+        List<PersonDto> entrants = resultService.getAllPersonWithoutAdminWithEnlist().stream()
+                .sorted((o1, o2) -> o1.getId().compareTo(o2.getId()))
+                .collect(Collectors.toList());
+        model.addAttribute("entrants", entrants);
+        model.addAttribute("person", new PersonDto());
+        return "entrants";
+    }
 }

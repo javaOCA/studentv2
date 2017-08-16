@@ -26,4 +26,6 @@ public interface RegistrationService {
     void saveFaculty(FacultyDto facultyDto);
 
     boolean findEvaluationDateByFaculty(PersonDto personDto);
+
+    void updatePerson(PersonDto personDto);
 }

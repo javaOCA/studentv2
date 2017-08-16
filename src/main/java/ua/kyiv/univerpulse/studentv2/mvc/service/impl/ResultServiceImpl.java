@@ -19,6 +19,7 @@ import ua.kyiv.univerpulse.studentv2.mvc.exception.ServiceException;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.FacultyRepository;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.MarksRepository;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.PersonRepository;
+import ua.kyiv.univerpulse.studentv2.mvc.service.MailService;
 import ua.kyiv.univerpulse.studentv2.mvc.service.ResultService;
 
 import java.time.LocalDate;
@@ -35,12 +36,14 @@ public class ResultServiceImpl implements ResultService {
     private MarksRepository marksRepository;
     private PersonRepository personRepository;
     private FacultyRepository facultyRepository;
+    private MailService mailService;
     @Autowired
     public ResultServiceImpl(MarksRepository marksRepository, PersonRepository personRepository,
-                             FacultyRepository facultyRepository) {
+                             FacultyRepository facultyRepository, MailService mailService) {
         this.marksRepository = marksRepository;
         this.personRepository = personRepository;
         this.facultyRepository = facultyRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -87,7 +90,7 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
-    @Scheduled(cron = "0 17 16 * * *")
+    @Scheduled(cron = "0 40 16 * * *")
     @Async
     @Transactional(propagation = Propagation.REQUIRED)
     public void processEntrantsAllFaculty() {
@@ -117,17 +120,11 @@ public class ResultServiceImpl implements ResultService {
                     if(persons.stream().filter(p -> p.getEnlist().getTotalScore() == condition).count() > 1) {
                         minPositiveResult = condition;
                     }
-//                    if(logger.isDebugEnabled())
-//                        logger.debug("!!!Student = " + student + ", minResult = " + minPositiveResult);
                     for (int i = faculty.getNumberOfStudents(); i < student.size(); i++) {
                         passerby.add(student.get(i));
                     }
                     student = student.stream().limit(3).collect(Collectors.toList());
                 }
-//                if(logger.isDebugEnabled())
-//                    logger.debug("---Student = " + student);
-//                if(logger.isDebugEnabled())
-//                    logger.debug("+++Passerby = " + passerby);
                 for (Person person: student) {
                     if(person.getEnlist().getTotalScore() == minPositiveResult) {
                         person.getEnlist().setAction(ActionEnum.INTERVIEW);
@@ -155,7 +152,8 @@ public class ResultServiceImpl implements ResultService {
     private void saveEntrantsAndSendMail(Person person) {
         try {
             personRepository.savePerson(person);
-        } catch(PersonSaveException e) {
+            mailService.sendMessage(person);
+        } catch(PersonSaveException | PersonMailException e) {
             logger.error("ResultService: catch person save or mail exception", e);
             throw new ServiceException(e.getMessage());
         }

@@ -1,8 +1,6 @@
 package ua.kyiv.univerpulse.studentv2.mvc.repository.impl;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ua.kyiv.univerpulse.studentv2.mvc.domain.Faculty;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.FacultyRepositoryCustom;
 
@@ -37,8 +35,6 @@ public class FacultyRepositoryImpl implements FacultyRepositoryCustom {
             fc.setPassingScore(faculty.getPassingScore());
             fc.setNumberOfStudents(faculty.getNumberOfStudents());
             em.merge(fc);
-            if (logger.isDebugEnabled())
-                logger.debug("Update entity Faculty in DB " + faculty);
         } catch (Exception e) {
             e.printStackTrace();
         }
