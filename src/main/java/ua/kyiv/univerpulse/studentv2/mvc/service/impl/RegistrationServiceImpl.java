@@ -84,7 +84,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             personRepository.savePerson(person);
             if (logger.isDebugEnabled())
                 logger.debug("Save in DB person with id: " + person.getId());
-//            mailService.sendMessage(personDto);
+            mailService.sendMessage(personDto);
             if (logger.isDebugEnabled())
                 logger.debug("Send e-mail to " + person.getEmail());
             uploadedFiles = uploadFiles.uploadFiles(files, person);
@@ -126,6 +126,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateFaculty(FacultyDto facultyDto) {
         Faculty faculty = new Faculty.Builder().getId(facultyDto)
                 .getName(facultyDto).getEvaluationDate(facultyDto)
@@ -136,6 +137,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void saveFaculty(FacultyDto facultyDto) {
         Faculty faculty = new Faculty.Builder().getName(facultyDto)
                 .getEvaluationDate(facultyDto).getPassingScore(facultyDto)

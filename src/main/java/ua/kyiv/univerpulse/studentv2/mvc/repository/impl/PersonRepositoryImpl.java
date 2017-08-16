@@ -1,5 +1,7 @@
 package ua.kyiv.univerpulse.studentv2.mvc.repository.impl;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.kyiv.univerpulse.studentv2.mvc.domain.Person;
 import ua.kyiv.univerpulse.studentv2.mvc.repository.PersonRepositoryCustom;
 

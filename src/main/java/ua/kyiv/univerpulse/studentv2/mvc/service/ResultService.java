@@ -11,5 +11,8 @@ public interface ResultService {
 
     Integer getTotalResult(MarksDto marksDto);
 
-    List<PersonDto> getAllPersonWithoutAdmin();
+    List<PersonDto> getAllPersonWithoutAdminWithEnlist();
+
+    void processEntrantsAllFaculty();
+
 }

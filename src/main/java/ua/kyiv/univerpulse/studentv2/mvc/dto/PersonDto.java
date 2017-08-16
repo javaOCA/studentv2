@@ -11,17 +11,17 @@ import java.time.format.DateTimeFormatter;
 public class PersonDto {
     private Long id;
     @NotNull
-    @Pattern(regexp = "\\w{2,}", message = "{message.login.err}")
+    @Pattern(regexp = "[\\w\\u0410-\\u044F\\u0401\\u0451]{2,}", message = "{message.login.err}")
     private String login;
     @NotNull
-    @Pattern(regexp = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})",
+    @Pattern(regexp = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])([\\u0410-\\u044F\\u0401\\u0451]*)(?=.*[@#$%]).{6,20})",
             message = "{message.password.err}")
     private String password;
     @NotNull
-    @Pattern(regexp = "\\w{2,}", message = "{message.firstname.err}")
+    @Pattern(regexp = "[\\w\\u0410-\\u044F\\u0401\\u0451]{2,}", message = "{message.firstname.err}")
     private String firstName;
     @NotNull
-    @Pattern(regexp = "\\w{2,}", message = "{message.lastname.err}")
+    @Pattern(regexp = "[\\w\\u0410-\\u044F\\u0401\\u0451]{2,}", message = "{message.lastname.err}")
     private String lastName;
     @NotNull
     @Pattern(regexp = "^[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])$", message = "{message.date.err}")

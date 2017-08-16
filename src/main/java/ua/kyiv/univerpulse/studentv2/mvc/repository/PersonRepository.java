@@ -21,6 +21,12 @@ public interface PersonRepository extends JpaRepository<Person, Long>, PersonRep
                                       @Param("street") String street,
                                       @Param("home") String home,
                                       @Param("apartment") String apartment);
-    @Query("select p from Person p where p.role.role <> ua.kyiv.univerpulse.studentv2.mvc.domain.RoleEnum.ROLE_ADMIN")
-    List<Person> getAllPersonWithoutAdmin();
+
+    @Query("select p from Person p join fetch p.enlist e where p.role.role <> ua.kyiv.univerpulse.studentv2.mvc.domain.RoleEnum.ROLE_ADMIN")
+    List<Person> getAllPersonWithoutAdminWithEnlist();
+
+    @Query("select p from Person p join fetch p.faculty f join fetch p.enlist e " +
+            "where f.id = :id and p.role.role <> ua.kyiv.univerpulse.studentv2.mvc.domain.RoleEnum.ROLE_ADMIN")
+    List<Person> findAllByFaculty_Id(@Param("id") Long id);
+
 }

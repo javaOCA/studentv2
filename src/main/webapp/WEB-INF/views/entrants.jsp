@@ -33,9 +33,9 @@
                     <td><sf:input path="email" size="20" value="${ent.email}"/></td>
                     <td><sf:input path="phone" size="20" value="${ent.phone}"/></td>
                     <td><sf:input path="faculty" size="30" readonly="true" value="${ent.faculty}"/></td>
-                    <td><sf:input path="enlist" size="30" readonly="true" value="${ent.enlist.totalScore}"/></td>
-                    <td></td>
-                    <td></td>
+                    <td><c:out value="${ent.enlist.totalScore}"/></td>
+                    <td><c:out value="${ent.enlist.receiptDate}"/></td>
+                    <td><c:out value="${ent.enlist.action}"/></td>
                     <td>
                         <button type="submit" class="btn_submit"><s:message code="faculty.update"/></button>
                     </td>

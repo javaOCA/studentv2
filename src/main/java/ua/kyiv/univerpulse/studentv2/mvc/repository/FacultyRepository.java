@@ -19,4 +19,5 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long>, Faculty
 
     @Query("select f.evaluationDate from Faculty f where f.name = :name")
     Date getEvaluationDateByName(@Param("name") String name);
+
 }

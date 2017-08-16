@@ -9,7 +9,8 @@ import javax.validation.constraints.Size;
 public class AddressDto {
     private Long id;
     @NotNull
-    @Pattern(regexp = "\\w{2,}", message = "{message.city.err}")
+    @Pattern(regexp = "[\\w\\u0410-\\u044F\\u0401\\u0451]{2,}[\\- _]?[\\w\\u0410-\\u044F\\u0401\\u0451]*",
+            message = "{message.city.err}")
     private String city;
     @NotNull
     @Size(min = 2, message = "{message.street.err}")

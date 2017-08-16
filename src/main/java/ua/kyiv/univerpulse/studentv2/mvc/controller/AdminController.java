@@ -7,12 +7,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ua.kyiv.univerpulse.studentv2.mvc.domain.Enlist;
+import ua.kyiv.univerpulse.studentv2.mvc.domain.Person;
+import ua.kyiv.univerpulse.studentv2.mvc.dto.EnlistDto;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.FacultyDto;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.PersonDto;
 import ua.kyiv.univerpulse.studentv2.mvc.service.RegistrationService;
 import ua.kyiv.univerpulse.studentv2.mvc.service.ResultService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -75,7 +79,10 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/entrants", method = RequestMethod.GET)
     public String getEntrantsPage(Model model) {
-        model.addAttribute("entrants", resultService.getAllPersonWithoutAdmin());
+        List<PersonDto> entrants = resultService.getAllPersonWithoutAdminWithEnlist().stream()
+                .sorted((o1, o2) -> o1.getId().compareTo(o2.getId()))
+                .collect(Collectors.toList());
+        model.addAttribute("entrants", entrants);
         model.addAttribute("person", new PersonDto());
         return "entrants";
     }

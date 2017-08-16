@@ -1,5 +1,7 @@
 package ua.kyiv.univerpulse.studentv2.mvc.domain;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.PersonDto;
 
 import javax.persistence.*;
@@ -23,15 +25,15 @@ public class Person {
     private Address address;
     private String phone;
     private String email;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "marks_id")
     private Marks marks;
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "enlist_id")
     private Enlist enlist;
 
@@ -251,13 +253,14 @@ public class Person {
         return "Person{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
                 ", education='" + education + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", faculties=" + faculty +
+                ", role=" + role +
                 '}';
     }
 }

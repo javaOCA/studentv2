@@ -33,7 +33,7 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public void sendMessage(PersonDto personDto) {
-        logger.info("Invoke method sendMessage");
+//        logger.info("Invoke method sendMessage");
         MimeMessagePreparator preparator = getMessagePreparator(personDto);
         try{
             mailSender.send(preparator);

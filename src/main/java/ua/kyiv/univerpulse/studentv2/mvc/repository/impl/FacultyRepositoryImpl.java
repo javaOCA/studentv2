@@ -17,7 +17,6 @@ public class FacultyRepositoryImpl implements FacultyRepositoryCustom {
     private EntityManager em;
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
     public void saveFaculty(Faculty faculty) {
         try {
             em.persist(faculty);
@@ -30,13 +29,13 @@ public class FacultyRepositoryImpl implements FacultyRepositoryCustom {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
     public void updateFaculty(Faculty faculty) {
         try {
             Faculty fc = (Faculty) em.find(Faculty.class, faculty.getId());
             fc.setName(faculty.getName());
             fc.setEvaluationDate(faculty.getEvaluationDate());
             fc.setPassingScore(faculty.getPassingScore());
+            fc.setNumberOfStudents(faculty.getNumberOfStudents());
             em.merge(fc);
             if (logger.isDebugEnabled())
                 logger.debug("Update entity Faculty in DB " + faculty);
