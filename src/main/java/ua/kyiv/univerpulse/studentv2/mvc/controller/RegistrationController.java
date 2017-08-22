@@ -4,6 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +24,13 @@ public class RegistrationController {
 
     private RegistrationService registrationService;
     private MessageSource messageSource;
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    public RegistrationController(RegistrationService registrationService, MessageSource messageSource) {
+    public RegistrationController(RegistrationService registrationService, MessageSource messageSource,
+                                  PasswordEncoder passwordEncoder) {
         this.registrationService = registrationService;
         this.messageSource = messageSource;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET, name = "registrationPerson")
@@ -64,7 +68,7 @@ public class RegistrationController {
             return "redirect:/registration";
         }
         HttpSession session = request.getSession(true);
-        personDto.setPassword(DigestUtils.md5Hex(personDto.getPassword() + personDto.getLogin()));
+        personDto.setPassword(passwordEncoder.encode(personDto.getPassword()));
         session.setAttribute("person", personDto);
         return "redirect:/address";
 

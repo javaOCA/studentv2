@@ -18,6 +18,7 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-core', version: '4.2.2.RELEASE'
     compile group: 'org.springframework.security', name: 'spring-security-web', version: '4.2.2.RELEASE'
     compile group: 'org.springframework.security', name: 'spring-security-config', version: '4.2.2.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-crypto', version: '4.2.2.RELEASE'
     compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '1.11.5.RELEASE'
     compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.9.Final'

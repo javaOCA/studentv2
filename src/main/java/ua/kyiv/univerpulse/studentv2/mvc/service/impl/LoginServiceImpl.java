@@ -3,6 +3,7 @@ package ua.kyiv.univerpulse.studentv2.mvc.service.impl;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.kyiv.univerpulse.studentv2.mvc.domain.Person;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.PersonDto;
@@ -17,9 +18,11 @@ public class LoginServiceImpl implements LoginService {
     private final static Logger logger = Logger.getLogger(RegistrationServiceImpl.class);
 
     private PersonRepository personRepository;
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    public LoginServiceImpl(PersonRepository personRepository) {
+    public LoginServiceImpl(PersonRepository personRepository, PasswordEncoder passwordEncoder) {
         this.personRepository = personRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -37,9 +40,7 @@ public class LoginServiceImpl implements LoginService {
                             .setFirstName(person).setLastName(person).setBirthday(person).setEducation(person)
                             .setEmail(person).setPhone(person).setRole(person).build();
             }
-            if (Objects.nonNull(personDto) && personDto.getPassword().equals(DigestUtils.md5Hex(password + login))) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Connect person with login = " + login);
+            if (Objects.nonNull(personDto) && passwordEncoder.matches(password, personDto.getPassword())) {
                 return personDto;
             }
         }
