@@ -53,13 +53,6 @@ public class FileUploadController {
         if (Objects.nonNull(personDto) && Objects.nonNull(addressDto) && Objects.nonNull(marksDto) && files.length != 0) {
             List<FileInfo> uploadedFiles = new ArrayList<>();
             uploadedFiles = registrationService.savePerson(personDto, addressDto, marksDto, files);
-            if (uploadedFiles.isEmpty()) {
-                if (logger.isDebugEnabled())
-                    logger.debug("uploadedFiles list is empty");
-            } else {
-                if (logger.isDebugEnabled())
-                    logger.debug("uploadedFiles list has length - " + uploadedFiles.size());
-            }
             session.setAttribute("files", uploadedFiles);
             session.setAttribute("firstName", personDto.getFirstName());
             session.setAttribute("lastName", personDto.getLastName());
