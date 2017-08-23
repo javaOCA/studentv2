@@ -23,9 +23,9 @@ public class UploadFilesImpl implements UploadFiles {
     @Override
     public List<FileInfo> uploadFiles(MultipartFile[] files, Person person) {
         List<FileInfo> uploadedFiles = new ArrayList<>();
-        FileInfo fileInfo = new FileInfo();
         File uploadFile = null;
         for (int i = 0; i < files.length; i++) {
+            FileInfo fileInfo = new FileInfo();
             String[] ext = files[i].getOriginalFilename().split("\\.");
             String extention = "";
             if (ext.length > 1) {

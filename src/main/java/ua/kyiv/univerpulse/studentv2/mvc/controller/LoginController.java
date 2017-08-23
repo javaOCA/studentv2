@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ua.kyiv.univerpulse.studentv2.mvc.domain.Person;
-import ua.kyiv.univerpulse.studentv2.mvc.domain.RoleEnum;
 import ua.kyiv.univerpulse.studentv2.mvc.dto.PersonDto;
 import ua.kyiv.univerpulse.studentv2.mvc.service.LoginService;
 
@@ -47,12 +45,8 @@ public class LoginController {
                               HttpServletRequest request,
                               HttpServletResponse response,
                               RedirectAttributes attributes) {
-        if (logger.isDebugEnabled())
-            logger.debug("Before invoke verifyLogin method");
         StringBuilder action = new StringBuilder();
         personDto = loginService.verifyLogin(personDto.getLogin(), personDto.getPassword());
-        if (logger.isDebugEnabled())
-            logger.debug("After invoke verifyLogin method");
         if (Objects.nonNull(personDto)) {
             session.setAttribute("person", personDto);
             switch (personDto.getRole().getRole()) {
@@ -70,4 +64,5 @@ public class LoginController {
         }
         return action.toString();
     }
+
 }

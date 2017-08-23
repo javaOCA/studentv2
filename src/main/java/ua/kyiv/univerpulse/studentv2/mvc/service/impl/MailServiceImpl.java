@@ -82,7 +82,7 @@ public class MailServiceImpl implements MailService {
         MimeMessagePreparator preparator = new MimeMessagePreparator() {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 mimeMessage.setFrom(new InternetAddress(env.getProperty("email.from")));
-                mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(env.getProperty("email.test.to")));
+                mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(person.getEmail()));
                 mimeMessage.setText(text);
                 mimeMessage.setSubject(subject);
             }
